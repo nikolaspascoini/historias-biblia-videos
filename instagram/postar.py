@@ -75,11 +75,13 @@ def main():
         global API
         tok = os.environ["IG_TOKEN"]
         print("DIAG token_len", len(tok), "prefix", tok[:4], "espacos", tok != tok.strip())
-        for base in ("https://graph.facebook.com/v24.0", "https://graph.instagram.com/v24.0", "https://graph.facebook.com/v21.0"):
+        for base in ("https://graph.facebook.com/v24.0",):
             API = base
-            for cam, campos in [("me", None), ("me", "id,username"), ("me", "id,name,user_id,username"),
+            for cam, campos in [("me", "id,name"), ("me/businesses", "id,name"),
                                 ("17841476308695336", "id,username"),
-                                ("me/accounts", "name,instagram_business_account{id,username}")]:
+                                ("me/accounts", "name,instagram_business_account{id,username}"),
+                                ("2377319089775132/client_instagram_assets", None),
+                                ("2377319089775132/instagram_business_accounts", None)]:
                 try:
                     kw = {"fields": campos} if campos else {}
                     r = chamar("GET", cam, **kw)
