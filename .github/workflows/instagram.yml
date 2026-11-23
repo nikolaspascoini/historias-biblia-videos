@@ -1,6 +1,8 @@
 name: Postar no Instagram
 
 on:
+  push:
+    paths: ["instagram/teste.txt"]   # mexer nesse arquivo roda um teste de conexao
   schedule:
     - cron: "*/15 * * * *"   # confere a agenda a cada 15 minutos
   workflow_dispatch:
@@ -26,7 +28,7 @@ jobs:
       - name: Publicar posts na hora
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
-          TESTAR: ${{ inputs.testar }}
+          TESTAR: ${{ github.event_name == 'push' || inputs.testar }}
         run: python3 instagram/postar.py
       - name: Salvar o que foi publicado
         if: always()
