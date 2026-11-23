@@ -72,7 +72,22 @@ def main():
         return 0
     repo = os.environ["GITHUB_REPOSITORY"]
     if os.environ.get("TESTAR") == "true":
-        print(f"Teste de conexao OK: @{conectar()[1]}")
+        global API
+        API = API_FB
+        for cam, campos in [("me", "id,name"),
+                            ("me/accounts", "name,instagram_business_account{id,username}"),
+                            ("2377319089775132/instagram_accounts", "id,username"),
+                            ("2377319089775132/owned_instagram_accounts", "id,username"),
+                            ("debug_token", None)]:
+            try:
+                kw = {"fields": campos} if campos else {"input_token": os.environ["IG_TOKEN"]}
+                r = chamar("GET", cam, **kw)
+                if cam == "debug_token":
+                    d = r.get("data", {})
+                    r = {k: d.get(k) for k in ("type", "app_id", "is_valid", "expires_at", "scopes", "granular_scopes")}
+                print("DIAG", cam, json.dumps(r, ensure_ascii=False)[:1500])
+            except Exception as e:
+                print("DIAG", cam, "ERRO", str(e)[:400])
         return 0
     agenda = json.load(open(AGENDA, encoding="utf-8"))
     agora = datetime.now(timezone.utc)
