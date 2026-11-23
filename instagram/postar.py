@@ -54,16 +54,9 @@ def publicar(ig_id, post, repo):
 
 def conectar():
     global API
-    try:  # token do login do Instagram
-        me = chamar("GET", "me", fields="user_id,username")
-        return me["user_id"], me["username"]
-    except RuntimeError as e1:  # token do Facebook / usuario do sistema
-        API = API_FB
-        try:
-            me = chamar("GET", IG_USER_ID, fields="id,username")
-        except RuntimeError as e2:
-            raise RuntimeError(f"Token nao funcionou.\n{e1}\n{e2}") from None
-        return me["id"], me["username"]
+    API = API_FB  # token de usuario do sistema (Meta Business), nao expira
+    me = chamar("GET", IG_USER_ID, fields="id,username")
+    return me["id"], me["username"]
 
 
 def main():
@@ -72,22 +65,9 @@ def main():
         return 0
     repo = os.environ["GITHUB_REPOSITORY"]
     if os.environ.get("TESTAR") == "true":
-        global API
-        tok = os.environ["IG_TOKEN"]
-        print("DIAG token_len", len(tok), "prefix", tok[:4], "espacos", tok != tok.strip())
-        for base in ("https://graph.facebook.com/v24.0",):
-            API = base
-            for cam, campos in [("me", "id,name"), ("me/businesses", "id,name"),
-                                ("17841476306695356", "id,username"),
-                                ("me/accounts", "name,instagram_business_account{id,username}"),
-                                ("2377319089775132/client_instagram_assets", None),
-                                ("2377319089775132/instagram_business_accounts", None)]:
-                try:
-                    kw = {"fields": campos} if campos else {}
-                    r = chamar("GET", cam, **kw)
-                    print("DIAG", base[-25:], cam, campos, json.dumps(r, ensure_ascii=False)[:600])
-                except Exception as e:
-                    print("DIAG", base[-25:], cam, campos, "ERRO", str(e)[:300])
+        ig_id, nome = conectar()
+        lim = chamar("GET", f"{ig_id}/content_publishing_limit", fields="quota_usage,config")
+        print(f"TESTE OK: conectado em @{nome}; limite de posts: {json.dumps(lim)}")
         return 0
     agenda = json.load(open(AGENDA, encoding="utf-8"))
     agora = datetime.now(timezone.utc)
