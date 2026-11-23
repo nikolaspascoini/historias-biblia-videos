@@ -73,21 +73,19 @@ def main():
     repo = os.environ["GITHUB_REPOSITORY"]
     if os.environ.get("TESTAR") == "true":
         global API
-        API = API_FB
-        for cam, campos in [("me", "id,name"),
-                            ("me/accounts", "name,instagram_business_account{id,username}"),
-                            ("2377319089775132/instagram_accounts", "id,username"),
-                            ("2377319089775132/owned_instagram_accounts", "id,username"),
-                            ("debug_token", None)]:
-            try:
-                kw = {"fields": campos} if campos else {"input_token": os.environ["IG_TOKEN"]}
-                r = chamar("GET", cam, **kw)
-                if cam == "debug_token":
-                    d = r.get("data", {})
-                    r = {k: d.get(k) for k in ("type", "app_id", "is_valid", "expires_at", "scopes", "granular_scopes")}
-                print("DIAG", cam, json.dumps(r, ensure_ascii=False)[:1500])
-            except Exception as e:
-                print("DIAG", cam, "ERRO", str(e)[:400])
+        tok = os.environ["IG_TOKEN"]
+        print("DIAG token_len", len(tok), "prefix", tok[:4], "espacos", tok != tok.strip())
+        for base in ("https://graph.facebook.com/v24.0", "https://graph.instagram.com/v24.0", "https://graph.facebook.com/v21.0"):
+            API = base
+            for cam, campos in [("me", None), ("me", "id,username"), ("me", "id,name,user_id,username"),
+                                ("17841476308695336", "id,username"),
+                                ("me/accounts", "name,instagram_business_account{id,username}")]:
+                try:
+                    kw = {"fields": campos} if campos else {}
+                    r = chamar("GET", cam, **kw)
+                    print("DIAG", base[-25:], cam, campos, json.dumps(r, ensure_ascii=False)[:600])
+                except Exception as e:
+                    print("DIAG", base[-25:], cam, campos, "ERRO", str(e)[:300])
         return 0
     agenda = json.load(open(AGENDA, encoding="utf-8"))
     agora = datetime.now(timezone.utc)
