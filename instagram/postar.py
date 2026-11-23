@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 
 API = "https://graph.instagram.com/v21.0"
 API_FB = "https://graph.facebook.com/v21.0"
-IG_USER_ID = os.environ.get("IG_USER_ID", "17841476308695336")  # @padrejoseanthonio
+IG_USER_ID = os.environ.get("IG_USER_ID", "17841476306695356")  # @padrejoseanthonio
 REPO_RAW = "https://raw.githubusercontent.com/{repo}/main/videos/{video}"
 AGENDA = os.path.join(os.path.dirname(__file__), "agenda.json")
 
@@ -78,7 +78,7 @@ def main():
         for base in ("https://graph.facebook.com/v24.0",):
             API = base
             for cam, campos in [("me", "id,name"), ("me/businesses", "id,name"),
-                                ("17841476308695336", "id,username"),
+                                ("17841476306695356", "id,username"),
                                 ("me/accounts", "name,instagram_business_account{id,username}"),
                                 ("2377319089775132/client_instagram_assets", None),
                                 ("2377319089775132/instagram_business_accounts", None)]:
