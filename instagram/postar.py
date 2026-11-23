@@ -13,6 +13,8 @@ import urllib.request
 from datetime import datetime, timezone
 
 API = "https://graph.instagram.com/v21.0"
+API_FB = "https://graph.facebook.com/v21.0"
+IG_USER_ID = os.environ.get("IG_USER_ID", "17841476308695336")  # @padrejoseanthonio
 REPO_RAW = "https://raw.githubusercontent.com/{repo}/main/videos/{video}"
 AGENDA = os.path.join(os.path.dirname(__file__), "agenda.json")
 
@@ -62,8 +64,14 @@ def main():
     if not pendentes:
         print("Nenhum post na hora.")
         return 0
-    me = chamar("GET", "me", fields="user_id,username")
-    ig_id = me["user_id"]
+    global API
+    try:  # token do login do Instagram
+        me = chamar("GET", "me", fields="user_id,username")
+        ig_id = me["user_id"]
+    except RuntimeError:  # token do Facebook / usuario do sistema
+        API = API_FB
+        me = chamar("GET", IG_USER_ID, fields="id,username")
+        ig_id = me["id"]
     print(f"Conta: @{me['username']}")
     erros = 0
     for p in pendentes[:3]:  # no maximo 3 por rodada
