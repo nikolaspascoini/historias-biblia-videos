@@ -52,11 +52,28 @@ def publicar(ig_id, post, repo):
     return pub["id"]
 
 
+def conectar():
+    global API
+    try:  # token do login do Instagram
+        me = chamar("GET", "me", fields="user_id,username")
+        return me["user_id"], me["username"]
+    except RuntimeError as e1:  # token do Facebook / usuario do sistema
+        API = API_FB
+        try:
+            me = chamar("GET", IG_USER_ID, fields="id,username")
+        except RuntimeError as e2:
+            raise RuntimeError(f"Token nao funcionou.\n{e1}\n{e2}") from None
+        return me["id"], me["username"]
+
+
 def main():
     if not os.environ.get("IG_TOKEN"):
         print("Segredo IG_TOKEN ainda nao configurado; nada a fazer.")
         return 0
     repo = os.environ["GITHUB_REPOSITORY"]
+    if os.environ.get("TESTAR") == "true":
+        print(f"Teste de conexao OK: @{conectar()[1]}")
+        return 0
     agenda = json.load(open(AGENDA, encoding="utf-8"))
     agora = datetime.now(timezone.utc)
     pendentes = [p for p in agenda if not p.get("publicado")
@@ -64,15 +81,8 @@ def main():
     if not pendentes:
         print("Nenhum post na hora.")
         return 0
-    global API
-    try:  # token do login do Instagram
-        me = chamar("GET", "me", fields="user_id,username")
-        ig_id = me["user_id"]
-    except RuntimeError:  # token do Facebook / usuario do sistema
-        API = API_FB
-        me = chamar("GET", IG_USER_ID, fields="id,username")
-        ig_id = me["id"]
-    print(f"Conta: @{me['username']}")
+    ig_id, nome = conectar()
+    print(f"Conta: @{nome}")
     erros = 0
     for p in pendentes[:3]:  # no maximo 3 por rodada
         try:

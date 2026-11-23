@@ -3,7 +3,12 @@ name: Postar no Instagram
 on:
   schedule:
     - cron: "*/15 * * * *"   # confere a agenda a cada 15 minutos
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      testar:
+        description: "So testar a conexao (nao posta nada)"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -21,6 +26,7 @@ jobs:
       - name: Publicar posts na hora
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          TESTAR: ${{ inputs.testar }}
         run: python3 instagram/postar.py
       - name: Salvar o que foi publicado
         if: always()
