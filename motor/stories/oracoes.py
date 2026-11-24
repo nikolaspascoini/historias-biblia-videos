@@ -349,5 +349,14 @@ _R = {
                  (S_verse("DEUS SUPRIRÁ", "TUDO", "FILIPENSES 4:19"), 9), (S_amen(), 11), (S_cta(), 12)],
     "saude": [(S_hook("ORAÇÃO", "PELA SAÚDE", "night"), 0), (S_light_on(), 1), (S_bedroom(True), 2), (S_family(3, "dusk", False), 4), (S_candle(), 6),
               (S_verse("PELAS SUAS FERIDAS", "FOMOS SARADOS", "ISAÍAS 53:5"), 8), (S_presence(), 9), (S_amen(), 10), (S_cta(), 11)],
+    "gratidao": [(S_hook("OBRIGADO,", "SENHOR", "dawn"), 0), (S_kneel("dusk"), 1), (S_sunrise(True), 2), (S_sunrise(False), 3), (S_door(), 4), (S_family(4, "dusk"), 5),
+                 (S_storm(), 6), (S_presence(), 7), (S_verse("EM TUDO", "DAI GRAÇAS", "1 TESSALONICENSES 5:18"), 8), (S_words("ESCOLHO A", "GRATIDÃO", "dawn", "sunrise"), 9), (S_amen(), 10), (S_cta(), 11)],
+    "medo": [(S_hook("NÃO TENHA", "MEDO", "night"), 0), (S_storm(), 1), (S_burden(), 2), (S_presence(), 3), (S_storm(False), 4), (S_light_on(), 5), (S_candle(), 6),
+             (S_verse("NÃO TEMAS,", "EU SOU CONTIGO", "ISAÍAS 41:10"), 7), (S_words("EU NÃO ESTOU", "SOZINHO", "dawn", "sunrise"), 8), (S_amen(), 10), (S_cta(), 11)],
+    "casamento": [(S_hook("PELO SEU", "CASAMENTO", "dusk"), 0), (S_kneel("dusk"), 1), (S_family(2, "dusk"), 2), (S_candle(), 4), (S_house_angels(), 5), (S_family(2, "dawn", False), 6),
+                  (S_presence(), 7), (S_verse("O AMOR", "TUDO SUPORTA", "1 CORÍNTIOS 13:7"), 8), (S_amen(), 10), (S_cta(), 11)],
+    "provisao": [(S_hook("AS CONTAS", "APERTARAM?", "night"), 0), (S_bills(), 1), (S_kneel("moon"), 3), (S_door(), 4), (S_candle(), 5), (S_sunrise(), 6),
+                 (S_verse("O SENHOR É", "MEU PASTOR", "SALMO 23:1"), 7), (S_words("NADA ME", "FALTARÁ", "dawn", "sunrise"), 8), (S_amen(), 9), (S_cta(), 10)],
+    "bencao": [(S_hook("RECEBA ESSA", "BÊNÇÃO", "dawn"), 0), (S_verse("O SENHOR", "TE ABENÇOE", "NÚMEROS 6:24"), 1), (S_house_angels(), 2), (S_amen(), 3), (S_cta(), 4)],
 }
 SCENES = _R[ORACAO]
