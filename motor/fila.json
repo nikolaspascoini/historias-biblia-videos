@@ -1,52 +1,52 @@
 [
- {
-  "id": "deus_fala",
-  "quando": "2026-12-04T12:00:00-03:00",
-  "legenda": "Se esse vídeo chegou até você, não é por acaso. Deus vê o que você carrega. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "dormir",
-  "quando": "2026-12-04T18:00:00-03:00",
-  "legenda": "Faça essa oração antes de dormir e entregue tudo nas mãos de Deus. 🌙🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "ansiedade",
-  "quando": "2026-12-05T12:00:00-03:00",
-  "legenda": "Se a ansiedade está apertando agora, respira fundo e ora comigo. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "salmo91",
-  "quando": "2026-12-05T18:00:00-03:00",
-  "legenda": "Salmo 91, a oração de proteção. Ore com fé por você e pela sua família. 🛡️🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "familia",
-  "quando": "2026-12-06T12:00:00-03:00",
-  "legenda": "Oração pela família. Escreva o nome da sua família nos comentários. ❤️🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "filhos",
-  "quando": "2026-12-06T18:00:00-03:00",
-  "legenda": "Toda mãe e todo pai precisam fazer essa oração pelos filhos. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "manha",
-  "quando": "2026-12-07T12:00:00-03:00",
-  "legenda": "Antes de pegar o celular, entregue o seu dia a Deus. ☀️🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "conversa",
-  "quando": "2026-12-07T18:00:00-03:00",
-  "legenda": "Uma conversa com Deus para quem está cansado. Você não está sozinho. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "trabalho",
-  "quando": "2026-12-08T12:00:00-03:00",
-  "legenda": "Oração pelo trabalho e pelo sustento da sua casa. Escreve amém. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- },
- {
-  "id": "saude",
-  "quando": "2026-12-08T18:00:00-03:00",
-  "legenda": "Oração pela saúde. Escreva o nome de quem precisa dessa oração. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
- }
+  {
+    "id": "deus_fala",
+    "quando": "2026-12-04T12:00:00-03:00",
+    "legenda": "Se esse vídeo chegou até você, não é por acaso. Deus vê o que você carrega. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "dormir",
+    "quando": "2026-12-04T18:00:00-03:00",
+    "legenda": "Faça essa oração antes de dormir e entregue tudo nas mãos de Deus. 🌙🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "ansiedade",
+    "quando": "2026-12-05T12:00:00-03:00",
+    "legenda": "Se a ansiedade está apertando agora, respira fundo e ora comigo. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "salmo91",
+    "quando": "2026-12-05T18:00:00-03:00",
+    "legenda": "Salmo 91, a oração de proteção. Ore com fé por você e pela sua família. 🛡️🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "familia",
+    "quando": "2026-12-06T12:00:00-03:00",
+    "legenda": "Oração pela família. Escreva o nome da sua família nos comentários. ❤️🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "filhos",
+    "quando": "2026-12-06T18:00:00-03:00",
+    "legenda": "Toda mãe e todo pai precisam fazer essa oração pelos filhos. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "manha",
+    "quando": "2026-12-07T12:00:00-03:00",
+    "legenda": "Antes de pegar o celular, entregue o seu dia a Deus. ☀️🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "conversa",
+    "quando": "2026-12-07T18:00:00-03:00",
+    "legenda": "Uma conversa com Deus para quem está cansado. Você não está sozinho. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "trabalho",
+    "quando": "2026-12-08T12:00:00-03:00",
+    "legenda": "Oração pelo trabalho e pelo sustento da sua casa. Escreve amém. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  },
+  {
+    "id": "saude",
+    "quando": "2026-12-08T18:00:00-03:00",
+    "legenda": "Oração pela saúde. Escreva o nome de quem precisa dessa oração. 🙏 Siga @padrejoseanthonio para mais orações #oracao #fe #deus #jesus #biblia"
+  }
 ]
