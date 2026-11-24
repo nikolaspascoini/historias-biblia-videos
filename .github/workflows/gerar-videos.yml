@@ -55,8 +55,13 @@ jobs:
           ref: main
       - name: Instalar dependencias
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg fonts-inter fonts-noto-cjk python3-cairo python3-numpy python3-pil > /dev/null
+          sudo rm -f /var/lib/man-db/auto-update
+          which ffmpeg || NEED=ffmpeg
+          sudo apt-get install -y -qq --no-install-recommends $NEED python3-cairo python3-numpy python3-pil > /dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends $NEED python3-cairo python3-numpy python3-pil > /dev/null)
+          sudo mkdir -p /usr/share/fonts/opentype/inter /usr/share/fonts/opentype/noto
+          sudo cp motor/fonts/Inter-*.otf /usr/share/fonts/opentype/inter/
+          sudo cp motor/fonts/NotoSerifCJK-Bold.ttc /usr/share/fonts/opentype/noto/
+          sudo fc-cache -f > /dev/null
       - name: Renderizar parte das cenas
         env:
           STORY: ${{ matrix.id }}
@@ -86,8 +91,9 @@ jobs:
           ref: main
       - name: Instalar dependencias
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg python3-cairo python3-numpy python3-pil > /dev/null
+          sudo rm -f /var/lib/man-db/auto-update
+          which ffmpeg || NEED=ffmpeg
+          sudo apt-get install -y -qq --no-install-recommends $NEED python3-cairo python3-numpy python3-pil > /dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends $NEED python3-cairo python3-numpy python3-pil > /dev/null)
       - uses: actions/download-artifact@v4
         with:
           path: motor/out_${{ matrix.id }}
