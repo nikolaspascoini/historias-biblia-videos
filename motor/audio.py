@@ -49,8 +49,10 @@ def drum(at, g=1.0, f0=95, f1=45):
 
 # sections (from the story's MUSIC config; defaults = Davi e Golias)
 MC = getattr(davi, "MUSIC", None) or {"tension": 12, "land": (16, 0.55), "hope": 17, "fast": 14}
-t_face = starts[MC["tension"]]; t_land = starts[MC["land"][0]] + (ends[MC["land"][0]] - starts[MC["land"][0]]) * MC["land"][1]; t_msg = starts[MC["hope"]]
-t_fast = starts[MC.get("fast", MC["tension"])]
+t_face = t_land = t_msg = t_fast = 0.0
+if MC.get("style") != "piano":
+    t_face = starts[MC["tension"]]; t_land = starts[MC["land"][0]] + (ends[MC["land"][0]] - starts[MC["land"][0]]) * MC["land"][1]; t_msg = starts[MC["hope"]]
+    t_fast = starts[MC.get("fast", MC["tension"])]
 def piano(m, at, d, g):
     f = mtof(m); tt = t_(d)
     s = np.zeros_like(tt)
