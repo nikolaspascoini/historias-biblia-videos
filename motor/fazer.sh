@@ -4,7 +4,7 @@ set -e
 BASE=${BIBLIA_BASE:-$(cd "$(dirname "$0")" && pwd)}; export BIBLIA_BASE=$BASE
 cd "$BASE"
 O=out_$STORY
-python3 davi.py render
+[ -n "$SKIP_RENDER" ] || python3 davi.py render
 python3 audio.py
 cd $O
 STYLE=$(cd "$BASE" && python3 -c "import davi;print(getattr(davi,'MUSIC',{}).get('style',''))" 2>/dev/null | tail -1)

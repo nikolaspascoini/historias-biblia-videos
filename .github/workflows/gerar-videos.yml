@@ -43,10 +43,41 @@ jobs:
     needs: vozes
     if: needs.vozes.outputs.lista != '[]'
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 90
     strategy:
       fail-fast: false
-      max-parallel: 10
+      matrix:
+        id: ${{ fromJson(needs.vozes.outputs.lista) }}
+        parte: [0, 1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Instalar dependencias
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-inter fonts-noto-cjk python3-cairo python3-numpy python3-pil > /dev/null
+      - name: Renderizar parte das cenas
+        env:
+          STORY: ${{ matrix.id }}
+          BIBLIA_BASE: ${{ github.workspace }}/motor
+        run: |
+          cd motor
+          KS=$(/usr/bin/python3 -c "import davi; n=len(davi.SCENES); print(' '.join(str(k) for k in range(n) if k % 5 == ${{ matrix.parte }}))" | tail -1)
+          echo "cenas: $KS"
+          [ -z "$KS" ] || /usr/bin/python3 davi.py render $KS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cenas-${{ matrix.id }}-${{ matrix.parte }}
+          path: motor/out_${{ matrix.id }}/s*.mp4
+          if-no-files-found: ignore
+
+  montar:
+    needs: [vozes, render]
+    if: needs.vozes.outputs.lista != '[]'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
       matrix:
         id: ${{ fromJson(needs.vozes.outputs.lista) }}
     steps:
@@ -56,20 +87,25 @@ jobs:
       - name: Instalar dependencias
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg fonts-inter fonts-noto-cjk python3-cairo python3-numpy python3-pil > /dev/null
-      - name: Montar video
+          sudo apt-get install -y -qq ffmpeg python3-cairo python3-numpy python3-pil > /dev/null
+      - uses: actions/download-artifact@v4
+        with:
+          path: motor/out_${{ matrix.id }}
+          pattern: cenas-${{ matrix.id }}-*
+          merge-multiple: true
+      - name: Trilha, mixagem e video final
         env:
           STORY: ${{ matrix.id }}
-        run: |
-          cd motor && /usr/bin/python3 -c "import cairo" && PATH=/usr/bin:$PATH ./fazer.sh
+          SKIP_RENDER: "1"
+        run: cd motor && ls out_$STORY && PATH=/usr/bin:$PATH ./fazer.sh
       - uses: actions/upload-artifact@v4
         with:
           name: video-${{ matrix.id }}
           path: motor/final/${{ matrix.id }}.mp4
 
   publicar:
-    needs: render
-    if: always() && needs.render.result != 'skipped'
+    needs: montar
+    if: always() && needs.montar.result != 'skipped'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
