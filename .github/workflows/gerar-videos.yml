@@ -3,7 +3,7 @@ name: Gerar videos
 on:
   workflow_dispatch: {}
   push:
-    paths: ["motor/fila.json", "motor/stories/**"]
+    paths: ["motor/fila.json", "motor/stories/**", "motor/voices/**"]
 
 permissions:
   contents: write
