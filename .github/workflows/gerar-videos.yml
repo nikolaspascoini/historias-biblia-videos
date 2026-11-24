@@ -1,0 +1,90 @@
+name: Gerar videos
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths: ["motor/fila.json", "motor/stories/**"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gerar-videos
+  cancel-in-progress: false
+
+jobs:
+  vozes:
+    runs-on: ubuntu-24.04
+    outputs:
+      lista: ${{ steps.lista.outputs.lista }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gerar vozes que faltam (ElevenLabs)
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python3 motor/tts.py
+      - name: Salvar vozes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add motor/voices
+          git diff --cached --quiet || (git commit -m "Vozes novas" && git push)
+      - name: Videos que faltam
+        id: lista
+        run: |
+          python3 - >> "$GITHUB_OUTPUT" <<'PY'
+          import json, os
+          fila = json.load(open("motor/fila.json"))
+          ids = [f["id"] for f in fila if not os.path.exists(f"videos/{f['id']}.mp4") and os.path.exists(f"motor/voices/{f['id']}.mp3")]
+          print("lista=" + json.dumps(ids))
+          PY
+
+  render:
+    needs: vozes
+    if: needs.vozes.outputs.lista != '[]'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        id: ${{ fromJson(needs.vozes.outputs.lista) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Instalar dependencias
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-inter fonts-noto-cjk python3-cairo python3-numpy python3-pil > /dev/null
+      - name: Montar video
+        env:
+          STORY: ${{ matrix.id }}
+        run: |
+          cd motor && /usr/bin/python3 -c "import cairo" && PATH=/usr/bin:$PATH ./fazer.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ matrix.id }}
+          path: motor/final/${{ matrix.id }}.mp4
+
+  publicar:
+    needs: render
+    if: always() && needs.render.result != 'skipped'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          path: novos
+          pattern: video-*
+          merge-multiple: true
+      - name: Guardar videos e agendar
+        run: |
+          mkdir -p videos && cp novos/*.mp4 videos/ 2>/dev/null || true
+          python3 motor/agendar.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add videos instagram/agenda.json
+          git diff --cached --quiet || (git commit -m "Videos novos e agenda" && git pull --rebase -q && git push)
