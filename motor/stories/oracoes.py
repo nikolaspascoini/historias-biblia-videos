@@ -2,7 +2,7 @@
 import json as _json
 TEXT = _json.load(open(f"{BASE}/stories/lote3.json"))[ORACAO]
 DISP = []
-HEADER = "ORAÇÃO DE HOJE"
+HEADER = globals().get("HEADER_OVR", "ORAÇÃO DE HOJE")
 MUSIC = {"style": "piano"}
 
 
@@ -358,5 +358,32 @@ _R = {
     "provisao": [(S_hook("AS CONTAS", "APERTARAM?", "night"), 0), (S_bills(), 1), (S_kneel("moon"), 3), (S_door(), 4), (S_candle(), 5), (S_sunrise(), 6),
                  (S_verse("O SENHOR É", "MEU PASTOR", "SALMO 23:1"), 7), (S_words("NADA ME", "FALTARÁ", "dawn", "sunrise"), 8), (S_amen(), 9), (S_cta(), 10)],
     "bencao": [(S_hook("RECEBA ESSA", "BÊNÇÃO", "dawn"), 0), (S_verse("O SENHOR", "TE ABENÇOE", "NÚMEROS 6:24"), 1), (S_house_angels(), 2), (S_amen(), 3), (S_cta(), 4)],
+    "tatuagem": [(S_hook("TATUAGEM", "É PECADO?", "night"), 0), (S_words("SIM OU", "NÃO?", "night", "light"), 1), (S_verse("NÃO FAREIS", "MARCAS NO CORPO", "LEVÍTICO 19:28", "night"), 3),
+                 (S_storm(), 4), (S_verse("O CORPO É", "TEMPLO", "1 CORÍNTIOS 6:19"), 5), (S_kneel("dusk"), 6), (S_words("DEUS OLHA", "O CORAÇÃO", "dawn", "sunrise"), 8),
+                 (S_presence(), 9), (S_words("E VOCÊ,", "O QUE ACHA?", "dusk", "light"), 11), (S_cta(), 13)],
+    "brigado": [(S_hook("DORMIR", "BRIGADO?", "night"), 0), (S_bedroom(), 1), (S_verse("NÃO SE PONHA", "O SOL SOBRE A IRA", "EFÉSIOS 4:26", "dusk"), 2), (S_storm(), 4),
+                (S_family(2, "dusk", False), 7), (S_words("1. VERDADE", "COM AMOR", "dusk", "light"), 8), (S_words("2. PERDOAR", "COMO CRISTO", "dawn", "light"), 9),
+                (S_words("3. PROCURAR", "A PAZ", "dawn", "sunrise"), 10), (S_candle(), 12), (S_cta("moon"), 14)],
+    "dividas": [(S_hook("A BÍBLIA E AS", "DÍVIDAS", "night"), 0), (S_bills(), 1), (S_verse("QUEM TOMA EMPRESTADO", "É ESCRAVO", "PROVÉRBIOS 22:7", "night"), 2),
+                (S_verse("A NINGUÉM", "FIQUEIS DEVENDO", "ROMANOS 13:8"), 3), (S_burden(), 4), (S_words("1. NÃO GASTAR", "MAIS DO QUE ENTRA", "dusk", "light"), 7),
+                (S_words("2. PAGAR", "O QUE DEVE", "dusk", "light"), 8), (S_words("3. CONFIAR", "EM DEUS", "dawn", "sunrise"), 9), (S_kneel("moon"), 10), (S_sunrise(), 11), (S_cta(), 12)],
+    "sogra": [(S_hook("SOGRA PODE", "MANDAR?", "dusk"), 0), (S_storm(), 1), (S_verse("DEIXARÁ PAI E MÃE", "E SE UNIRÁ", "GÊNESIS 2:24", "dusk"), 2), (S_door(), 3),
+              (S_family(4, "dusk"), 4), (S_family(2, "dawn", False), 5), (S_house_angels(), 6), (S_words("HONRAR", "SIM", "dawn", "light"), 8), (S_words("GOVERNAR", "NÃO", "night", "light"), 9),
+              (S_words("UM SÓ", "TIME", "dawn", "sunrise"), 10), (S_cta(), 12)],
+    "namoro": [(S_hook("NAMORAR SEM", "FÉ PODE?", "dusk"), 0), (S_kneel("dusk"), 1), (S_verse("NÃO VOS PRENDAIS", "A JUGO DESIGUAL", "2 CORÍNTIOS 6:14", "dusk"), 2),
+               (S_burden(), 3), (S_storm(False), 4), (S_presence(), 5), (S_family(2, "dusk", False), 6), (S_candle(), 7), (S_sunrise(), 8), (S_cta(), 9)],
+    "anjo": [(S_hook("ANJO DA", "GUARDA EXISTE?", "night"), 0), (S_light_on(), 1), (S_verse("MANDARÁ OS", "SEUS ANJOS", "SALMO 91:11", "night"), 2), (S_house_angels(), 3),
+             (S_parent_child(), 4), (S_shelter(), 6), (S_words("SÓ DEUS É", "ADORADO", "dawn", "light"), 7), (S_kneel("moon"), 8), (S_door(), 9), (S_cta(), 10)],
+    "sinal_cruz": [(S_hook("POR QUE O", "SINAL DA CRUZ?", "dusk"), 0), (S_words("NÃO É", "SUPERSTIÇÃO", "night", "light"), 1), (S_kneel("dusk"), 2),
+                   (S_verse("EM NOME DO PAI,", "DO FILHO E DO ESPÍRITO", "MATEUS 28:19"), 3), (S_candle(), 4), (S_presence(), 5), (S_words("EU PERTENÇO", "A DEUS", "dawn", "sunrise"), 7),
+                   (S_kneel("moon", False), 8), (S_cta(), 9)],
+    "jesus_bravo": [(S_hook("JESUS FICOU", "BRAVO?", "night"), 0), (S_storm(), 1), (S_words("O TEMPLO", "VIROU COMÉRCIO", "night", "light"), 2), (S_storm(False), 3),
+                    (S_presence(), 4), (S_words("PAI,", "PERDOA-LHES", "dawn", "light"), 6), (S_light_on(), 7), (S_words("DEUS OU", "O SEU EGO?", "dusk", "light"), 9), (S_cta(), 10)],
+    "vinho": [(S_hook("CRISTÃO", "PODE BEBER?", "dusk"), 0), (S_words("A RESPOSTA", "SURPREENDE", "night", "light"), 1), (S_family(4, "dusk"), 2),
+              (S_verse("O VINHO ALEGRA", "O CORAÇÃO", "SALMO 104:15", "dusk"), 3), (S_storm(), 5), (S_verse("NÃO VOS", "EMBRIAGUEIS", "EFÉSIOS 5:18", "night"), 6),
+              (S_burden(), 7), (S_kneel("moon"), 9), (S_cta(), 10)],
+    "esposa": [(S_hook("O QUE DEUS PEDE", "À ESPOSA?", "dawn"), 0), (S_words("NÃO É", "SER CALADA", "dusk", "light"), 1), (S_verse("A MULHER", "VIRTUOSA", "PROVÉRBIOS 31", "dawn"), 2),
+               (S_family(2, "dawn", False), 3), (S_house_angels(), 4), (S_words("1.", "CONFIÁVEL", "dawn", "light"), 7), (S_words("2.", "FORTE", "dawn", "light"), 8),
+               (S_words("3. TEME", "A DEUS", "dawn", "sunrise"), 9), (S_cta(), 11)],
 }
 SCENES = _R[ORACAO]

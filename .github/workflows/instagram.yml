@@ -2,18 +2,19 @@ name: Postar no Instagram
 
 on:
   push:
-    paths: ["instagram/teste.txt"]   # mexer nesse arquivo roda um teste de conexao
+    paths: ["instagram/teste.txt", "instagram/agenda.json"]   # teste.txt = so testa a conexao
   schedule:
-    - cron: "*/15 * * * *"   # confere a agenda a cada 15 minutos
+    - cron: "*/30 * * * *"   # reserva: religa o vigia se ele parar
   workflow_dispatch:
     inputs:
       testar:
         description: "So testar a conexao (nao posta nada)"
         type: boolean
-        default: true
+        default: false
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: instagram
@@ -22,21 +23,30 @@ concurrency:
 jobs:
   postar:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
-      - name: Publicar posts na hora
+      - name: Vigiar a agenda e publicar na hora certa
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
-          TESTAR: ${{ github.event_name == 'push' || inputs.testar }}
-        run: python3 instagram/postar.py
-      - name: Salvar o que foi publicado
-        if: always()
+          TESTAR: ${{ inputs.testar == true || (github.event_name == 'push' && contains(join(github.event.commits.*.modified, ','), 'teste.txt')) }}
         run: |
-          if ! git diff --quiet instagram/agenda.json; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add instagram/agenda.json
-            git commit -m "Instagram: agenda atualizada"
-            git push
-          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$TESTAR" = "true" ]; then python3 instagram/postar.py; exit $?; fi
+          fim=$(( $(date +%s) + 340*60 ))
+          while [ "$(date +%s)" -lt "$fim" ]; do
+            git pull -q --rebase origin main || true
+            python3 instagram/postar.py || true
+            if ! git diff --quiet instagram/agenda.json; then
+              git add instagram/agenda.json
+              git commit -qm "Instagram: agenda atualizada [skip ci]"
+              git pull -q --rebase origin main && git push -q || true
+            fi
+            sleep 120
+          done
+      - name: Religar o vigia
+        if: always() && inputs.testar != true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run instagram.yml -R "$GITHUB_REPOSITORY" -f testar=false || true
