@@ -37,13 +37,13 @@ jobs:
           fim=$(( $(date +%s) + 340*60 ))
           while [ "$(date +%s)" -lt "$fim" ]; do
             git pull -q --rebase origin main || true
-            python3 instagram/postar.py || true
+            if python3 instagram/postar.py; then pausa=300; else pausa=1800; fi
             if ! git diff --quiet instagram/agenda.json; then
               git add instagram/agenda.json
               git commit -qm "Instagram: agenda atualizada [skip ci]"
               git pull -q --rebase origin main && git push -q || true
             fi
-            sleep 120
+            sleep $pausa
           done
       - name: Religar o vigia
         if: always() && inputs.testar != true

@@ -79,7 +79,7 @@ def main():
     ig_id, nome = conectar()
     print(f"Conta: @{nome}")
     erros = 0
-    for p in pendentes[:3]:  # no maximo 3 por rodada
+    for p in pendentes[:1]:  # um por rodada
         try:
             mid = publicar(ig_id, p, repo)
             p["publicado"] = agora.isoformat(timespec="minutes")
