@@ -2,7 +2,7 @@ name: Postar no Instagram
 
 on:
   push:
-    paths: ["instagram/teste.txt", "instagram/agenda.json"]   # teste.txt = so testa a conexao
+    paths: ["instagram/teste.txt"]   # so testa a conexao
   schedule:
     - cron: "*/30 * * * *"   # reserva: religa o vigia se ele parar
   workflow_dispatch:
@@ -17,7 +17,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: instagram
+  group: ${{ (github.event_name == 'push' || inputs.testar == true) && 'instagram-teste' || 'instagram' }}
   cancel-in-progress: false
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
       - name: Vigiar a agenda e publicar na hora certa
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
-          TESTAR: ${{ inputs.testar == true || (github.event_name == 'push' && contains(join(github.event.commits.*.modified, ','), 'teste.txt')) }}
+          TESTAR: ${{ inputs.testar == true || github.event_name == 'push' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -46,7 +46,7 @@ jobs:
             sleep $pausa
           done
       - name: Religar o vigia
-        if: always() && inputs.testar != true
+        if: always() && inputs.testar != true && github.event_name != 'push'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run instagram.yml -R "$GITHUB_REPOSITORY" -f testar=false || true
